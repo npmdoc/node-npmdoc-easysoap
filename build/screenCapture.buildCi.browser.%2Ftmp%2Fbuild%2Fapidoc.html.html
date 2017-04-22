@@ -1,0 +1,262 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="https://github.com/moszeed/easysoap#readme">easysoap (v1.0.6)</a>
+</h1>
+<h4>a easy to use Soap Client for Node.js</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.easysoap">module easysoap</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.easysoap.createClient">
+            function <span class="apidocSignatureSpan">easysoap.</span>createClient
+            <span class="apidocSignatureSpan">(params, opts)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">easysoap.</span>request</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.easysoap.request">module easysoap.request</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.easysoap.request.getRequestXml">
+            function <span class="apidocSignatureSpan">easysoap.request.</span>getRequestXml
+            <span class="apidocSignatureSpan">(callParams, params, opts)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.easysoap.request.soapCall">
+            function <span class="apidocSignatureSpan">easysoap.request.</span>soapCall
+            <span class="apidocSignatureSpan">(callParams, params, opts)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.easysoap" id="apidoc.module.easysoap">module easysoap</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.easysoap.createClient" id="apidoc.element.easysoap.createClient">
+        function <span class="apidocSignatureSpan">easysoap.</span>createClient
+        <span class="apidocSignatureSpan">(params, opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">createClient = function (params, opts) {
+
+    params = params || {};
+    opts   = opts || {};
+
+    //check if all data is set
+    mandatoryCheck(params);
+
+    if (!opts.secure) {
+        opts.secure = false;
+    }
+
+    // fix params and opts
+    if (params.host.match('http://')) {
+        params.host = params.host.substring(7);
+        opts.secure = false;
+    }
+
+    if (params.host.match('https://')) {
+        params.host = params.host.substring(8);
+        opts.secure = true;
+    }
+
+    return new EasySoap(params, opts);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    'namespace': 'item_namespace'
+}]
+        }
+		
+        /*
+         * create the client
+         */
+        var soapClient = easysoap.<span class="apidocCodeKeywordSpan">createClient</span>(params);
+			
+
+/*
+			 * get all available functions
+        	 */
+			soapClient.getAllFunctions()
+	.then((functionArray) =&gt; { console.log(functionArray); })
+...</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.easysoap.request" id="apidoc.module.easysoap.request">module easysoap.request</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.easysoap.request.getRequestXml" id="apidoc.element.easysoap.request.getRequestXml">
+        function <span class="apidocSignatureSpan">easysoap.request.</span>getRequestXml
+        <span class="apidocSignatureSpan">(callParams, params, opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">(callParams, params, opts) =&gt; {
+
+    var reqHeadParams   = getRequestHeadParams(_.extend(params, callParams));
+    var reqEnvParams    = getRequestEnvelopeParams(_.extend(params, callParams), opts);
+    var reqParamsString = getRequestParamsAsString(callParams, params, opts);
+
+    return Promise.all([reqEnvParams, reqParamsString])
+        .then((reqParams) =&gt; {
+
+            var envParams       = reqParams[0];
+            var reqParamsString = reqParams[1];
+
+            return requestTpl({
+                'envelope': envParams,
+                'head'    : reqHeadParams,
+                'body'    : reqParamsString
+            });
+        });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+     * @param  {[type]} callParams [description]
+     * @param  {[type]} params     [description]
+     * @param  {[type]} opts       [description]
+     * @return {[type]}            [description]
+     */
+    that.soapCall = (callParams, params, opts) =&gt; {
+
+        return that.<span class="apidocCodeKeywordSpan">getRequestXml</span>(callParams, params, opts)
+            .then((requestXml) =&gt; {
+
+// default headers
+var headers = {}
+    headers['Content-Type'] = 'text/xml; charset=utf-8';
+
+// custom headers
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.easysoap.request.soapCall" id="apidoc.element.easysoap.request.soapCall">
+        function <span class="apidocSignatureSpan">easysoap.request.</span>soapCall
+        <span class="apidocSignatureSpan">(callParams, params, opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">(callParams, params, opts) =&gt; {
+
+    return that.getRequestXml(callParams, params, opts)
+        .then((requestXml) =&gt; {
+
+            // default headers
+            var headers = {}
+                headers['Content-Type'] = 'text/xml; charset=utf-8';
+
+            // custom headers
+            _.each(params.headers, (headerItem) =&gt; {
+                headers[headerItem.name] = headerItem.value
+            });
+
+            return new Promise((resolve, reject) =&gt; {
+                request({
+                    url               : getProtocol(opts) + params.host + params.path,
+                    body              : requestXml,
+                    headers           : headers,
+                    rejectUnauthorized: params.rejectUnauthorized,
+                    method            : 'POST'
+                }, function(error, response, body) {
+                    if (error) { reject(error); }
+                    else {
+                        resolve({
+                            'body'    : body,
+                            'response': response,
+                            'header'  : response.headers
+                        });
+                    }
+                });
+            });
+        });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
