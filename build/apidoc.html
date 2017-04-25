@@ -193,21 +193,21 @@
         });
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-     * @param  {[type]} callParams [description]
-     * @param  {[type]} params     [description]
-     * @param  {[type]} opts       [description]
-     * @return {[type]}            [description]
-     */
-    that.soapCall = (callParams, params, opts) =&#x3e; {
 
-        return that.<span class="apidocCodeKeywordSpan">getRequestXml</span>(callParams, params, opts)
-            .then((requestXml) =&#x3e; {
+    callParams = callParams || {};
 
-// default headers
-var headers = {}
-    headers[&#x27;Content-Type&#x27;] = &#x27;text/xml; charset=utf-8&#x27;;
+    if (!callParams.method) {
+        throw new Error(&#x27;no method given&#x27;);
+    }
 
-// custom headers
+    return soapRequest.<span class="apidocCodeKeywordSpan">getRequestXml</span>(callParams, params, opts);
+},
+
+
+/**
+ * [description]
+ * @param  {[type]} xml [description]
+ * @return {[type]}     [description]
 ...</pre></li>
     </ul>
 
@@ -254,7 +254,23 @@ var headers = {}
             });
         });
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+                callParams = callParams || {};
+
+                if (!callParams.method) {
+                    throw new Error(&#x27;no method given&#x27;);
+                }
+
+                return soapRequest.<span class="apidocCodeKeywordSpan">soapCall</span>(callParams, params, opts)
+                    .then((soapResponse) =&#x3e; {
+
+                        return wsdlrdr.getMethodParamsByName(callParams.method, params, opts)
+                            .then((methodParams) =&#x3e; {
+
+// get xml data as json, try to flatten the output
+var dataAsJson = wsdlrdr.getXmlDataAsJson(soapResponse.body);
+...</pre></li>
     </ul>
 
 
