@@ -1,6 +1,6 @@
 # npmdoc-easysoap
 
-#### api documentation for  [easysoap (v1.0.6)](https://github.com/moszeed/easysoap#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-easysoap.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-easysoap) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-easysoap.svg)](https://travis-ci.org/npmdoc/node-npmdoc-easysoap)
+#### basic api documentation for  [easysoap (v1.0.6)](https://github.com/moszeed/easysoap#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-easysoap.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-easysoap) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-easysoap.svg)](https://travis-ci.org/npmdoc/node-npmdoc-easysoap)
 
 #### a easy to use Soap Client for Node.js
 
